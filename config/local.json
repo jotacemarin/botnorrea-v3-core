@@ -1,0 +1,16 @@
+{
+  "service": {
+    "name": "botnorrea-v3-core"
+  },
+  "provider": {
+    "name": "aws",
+    "runtime": "nodejs22.x",
+    "stage": "local",
+    "region": "",
+    "profile": "",
+    "environment": {
+      "TELEGRAM_BOT_TOKEN": "",
+      "TELEGRAM_WEBHOOK_SECRET": ""
+    }
+  }
+}

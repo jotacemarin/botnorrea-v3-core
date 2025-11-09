@@ -1,0 +1,28 @@
+{
+  "name": "botnorrea-v3-core",
+  "type": "module",
+  "scripts": {
+    "hono:build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 ./src/index.ts",
+    "hono:deploy": "run-s build zip update",
+    "hono:update": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name hello",
+    "hono:zip": "zip -j lambda.zip dist/index.js",
+    "build": "sst build",
+    "dev": "sst dev --stage dev",
+    "dev:remove": "sst remove --stage dev --print-logs",
+    "stg:deploy": "sst deploy --stage stg --print-logs",
+    "stg:remove": "sst remove --stage stg --print-logs",
+    "prod:deploy": "sst deploy --stage prod",
+    "prod:remove": "sst remove --stage prod"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.157",
+    "esbuild": "^0.21.4",
+    "npm-run-all2": "^6.2.0"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "hono": "^4.10.4",
+    "http-status": "^2.1.0",
+    "sst": "3.17.23"
+  }
+}
