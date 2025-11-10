@@ -45,8 +45,6 @@ export const sendMessageToTelegram = async (
     };
   }
 
-  TelegramService.initInstance(c.env.TELEGRAM_BOT_TOKEN);
-
   await TelegramService.sendMessage({
     chat_id: body.chat_id,
     text: body.text,

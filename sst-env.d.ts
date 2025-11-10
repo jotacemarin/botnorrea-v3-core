@@ -5,6 +5,19 @@
 
 declare module "sst" {
   export interface Resource {
+    "api": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
+    "clientsTable": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "webhookQueue": {
+      "type": "sst.aws.Queue"
+      "url": string
+    }
   }
 }
 /// <reference path="sst-env.d.ts" />

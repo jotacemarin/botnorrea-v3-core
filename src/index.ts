@@ -3,7 +3,8 @@ import { handle } from "hono/aws-lambda";
 import { basicAuth } from "hono/basic-auth";
 import { logger } from "hono/logger";
 import {
-  verifyUser,
+  verifyConsumer,
+  verifyQuerySecret,
   telegramDebug,
   telegramWebhook,
   publicWebhook,
@@ -12,7 +13,9 @@ import {
 const app = new Hono();
 
 app.use(logger());
-app.use(basicAuth({ verifyUser }));
+
+app.use("/public/*", basicAuth({ verifyUser: verifyConsumer }));
+app.use("/telegram/webhook", verifyQuerySecret);
 
 app.post("/telegram/webhook", telegramWebhook);
 app.post("/telegram/debug", telegramDebug);

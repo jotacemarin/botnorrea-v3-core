@@ -24,8 +24,6 @@ export const telegramDebug = async (c: Context) => {
     );
   }
 
-  TelegramService.initInstance(c.env.TELEGRAM_BOT_TOKEN);
-
   const messageToDebug = getMessageToDebug(body);
 
   await TelegramService.sendMessage({
@@ -35,5 +33,5 @@ export const telegramDebug = async (c: Context) => {
     text: `<code>${messageToDebug}</code>`,
   });
 
-  return c.status(status.OK);
+  return c.json({ success: true }, status.OK);
 };
