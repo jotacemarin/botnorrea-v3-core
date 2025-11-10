@@ -8,9 +8,8 @@
     "hono:zip": "zip -j lambda.zip dist/index.js",
     "build": "sst build",
     "dev": "sst dev --stage dev",
+    "dev:deploy": "sst deploy --stage dev --print-logs",
     "dev:remove": "sst remove --stage dev --print-logs",
-    "stg:deploy": "sst deploy --stage stg --print-logs",
-    "stg:remove": "sst remove --stage stg --print-logs",
     "prod:deploy": "sst deploy --stage prod",
     "prod:remove": "sst remove --stage prod"
   },

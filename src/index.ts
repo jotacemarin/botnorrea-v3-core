@@ -5,8 +5,8 @@ import { logger } from "hono/logger";
 import {
   verifyConsumer,
   verifyQuerySecret,
-  telegramDebug,
   telegramWebhook,
+  telegramSetWebhook,
   publicWebhook,
 } from "./functions";
 
@@ -14,11 +14,10 @@ const app = new Hono();
 
 app.use(logger());
 
-app.use("/public/*", basicAuth({ verifyUser: verifyConsumer }));
-app.use("/telegram/webhook", verifyQuerySecret);
+const consumerMiddleware = basicAuth({ verifyUser: verifyConsumer });
 
-app.post("/telegram/webhook", telegramWebhook);
-app.post("/telegram/debug", telegramDebug);
-app.post("/public/webhook", publicWebhook);
+app.post("/telegram/webhook", verifyQuerySecret, telegramWebhook);
+app.post("/telegram/set-webhook", consumerMiddleware, telegramSetWebhook);
+app.post("/public/webhook", consumerMiddleware, publicWebhook);
 
 export const handler = handle(app);

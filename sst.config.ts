@@ -20,8 +20,7 @@ export default $config({
     const environment = {
       TELEGRAM_BOT_TOKEN: config.environment.TELEGRAM_BOT_TOKEN,
       TELEGRAM_WEBHOOK_SECRET: config.environment.TELEGRAM_WEBHOOK_SECRET,
-      PUBLIC_WEBHOOK_USERNAME: config.environment.PUBLIC_WEBHOOK_USERNAME,
-      PUBLIC_WEBHOOK_PASSWORD: config.environment.PUBLIC_WEBHOOK_PASSWORD,
+      BOT_USERNAME: config.environment.BOT_USERNAME,
     };
 
     const clientsTable = new sst.aws.Dynamo("clientsTable", {
