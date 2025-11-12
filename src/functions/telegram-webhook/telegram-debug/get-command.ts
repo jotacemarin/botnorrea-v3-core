@@ -1,4 +1,4 @@
-import { EntityType_Telegram, Update_Telegram } from "../../../models/telegram";
+import { EntityType_Telegram, Update_Telegram } from "../../../interfaces/telegram";
 
 const BOT_USERNAME = process.env.BOT_USERNAME ?? "";
 

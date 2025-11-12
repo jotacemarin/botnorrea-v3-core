@@ -1,5 +1,4 @@
 import { Context, Next } from "hono";
-import { ConsumerService } from "../../services/consumers";
 import status from "http-status";
 
 const TELEGRAM_WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET ?? "";

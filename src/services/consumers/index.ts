@@ -1,36 +1,48 @@
 import { Resource } from "sst";
 import { DynamoService } from "../dynamo";
-import { Consumer_Botnorrea } from "../../models/consumer";
+import { IStorageService } from "../../interfaces/storage";
+import { IConsumer_Botnorrea } from "../../interfaces/consumer";
 
-const create = async (
-  consumer: Consumer_Botnorrea
-): Promise<Consumer_Botnorrea> => {
-  return DynamoService.create(consumer, Resource.clientsTable?.name);
-};
+class ConsumerServiceClass {
+  private storageService: IStorageService;
+  private tableName: string;
 
-const getById = async (id: string): Promise<Consumer_Botnorrea | null> => {
-  return DynamoService.getById(id, Resource.clientsTable?.name);
-};
+  constructor(storageService: IStorageService, tableName?: string) {
+    this.storageService = storageService;
+    this.tableName = tableName || Resource.clientsTable?.name || "";
+  }
 
-const update = async (
-  id: string,
-  updates: Partial<Omit<Consumer_Botnorrea, "id">>
-): Promise<Consumer_Botnorrea | null> => {
-  return DynamoService.update(id, updates, Resource.clientsTable?.name);
-};
+  async create(consumer: IConsumer_Botnorrea): Promise<IConsumer_Botnorrea> {
+    return this.storageService.create(consumer, this.tableName);
+  }
 
-const deleteById = async (id: string): Promise<boolean> => {
-  return DynamoService.deleteById(id, Resource.clientsTable?.name);
-};
+  async getById(id: string): Promise<IConsumer_Botnorrea | null> {
+    return this.storageService.getById<IConsumer_Botnorrea>(id, this.tableName);
+  }
 
-const getAll = async (): Promise<Consumer_Botnorrea[]> => {
-  return DynamoService.getAll(Resource.clientsTable?.name);
-};
+  async update(
+    id: string,
+    updates: Partial<Omit<IConsumer_Botnorrea, "id">>
+  ): Promise<IConsumer_Botnorrea | null> {
+    return this.storageService.update<IConsumer_Botnorrea>(
+      id,
+      updates,
+      this.tableName
+    );
+  }
 
-export const ConsumerService = {
-  create,
-  getById,
-  update,
-  deleteById,
-  getAll,
-};
+  async deleteById(id: string): Promise<boolean> {
+    return this.storageService.deleteById(id, this.tableName);
+  }
+
+  async getAll(): Promise<IConsumer_Botnorrea[]> {
+    return this.storageService.getAll<IConsumer_Botnorrea>(this.tableName);
+  }
+}
+
+export const ConsumerService = new ConsumerServiceClass(
+  DynamoService,
+  Resource.clientsTable?.name
+);
+
+export { ConsumerServiceClass };

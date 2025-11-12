@@ -7,6 +7,7 @@ import {
   DeleteCommand,
   ScanCommand,
 } from "@aws-sdk/lib-dynamodb";
+import { IStorageService } from "../../interfaces/storage";
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
@@ -106,7 +107,7 @@ const getAll = async <T extends BaseItem>(tableName: string): Promise<T[]> => {
   return (result.Items as T[]) || [];
 };
 
-export const DynamoService = {
+export const DynamoService: IStorageService = {
   create,
   getById,
   update,

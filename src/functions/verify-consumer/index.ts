@@ -1,8 +1,6 @@
 import { Context } from "hono";
 import { ConsumerService } from "../../services/consumers";
 
-const TELEGRAM_WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET ?? "";
-
 export const verifyConsumer = async (
   username: string,
   password: string,

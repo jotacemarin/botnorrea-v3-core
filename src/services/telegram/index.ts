@@ -4,7 +4,8 @@ import {
   User_Telegram,
   FormattingOptions_Telegram,
   Message_Telegram,
-} from "../../models/telegram";
+} from "../../interfaces/telegram";
+import { ITelegramService } from "../../interfaces/telegram";
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN ?? "";
 
@@ -206,7 +207,7 @@ const deleteMessage = (params: {
   return instance.post("/deleteMessage", params);
 };
 
-export const TelegramService = {
+export const TelegramService: ITelegramService = {
   setWebhook,
   getWebhookInfo,
   sendMessage,

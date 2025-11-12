@@ -1,7 +1,7 @@
 import {
   FormattingOptions_Telegram,
   Update_Telegram,
-} from "../../../models/telegram";
+} from "../../../interfaces/telegram";
 import { TelegramService } from "../../../services";
 import { getCommand } from "./get-command";
 
