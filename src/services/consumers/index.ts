@@ -1,48 +1,102 @@
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  PutCommand,
+  UpdateCommand,
+  DeleteCommand,
+  ScanCommand,
+} from "@aws-sdk/lib-dynamodb";
 import { Resource } from "sst";
-import { DynamoService } from "../dynamo";
-import { IStorageService } from "../../interfaces/storage";
-import { IConsumer_Botnorrea } from "../../interfaces/consumer";
+import {
+  IConsumer_Botnorrea,
+  IConsumerService,
+} from "../../interfaces/consumer";
 
-class ConsumerServiceClass {
-  private storageService: IStorageService;
-  private tableName: string;
+const client = new DynamoDBClient({});
+const docClient = DynamoDBDocumentClient.from(client);
 
-  constructor(storageService: IStorageService, tableName?: string) {
-    this.storageService = storageService;
-    this.tableName = tableName || Resource.clientsTable?.name || "";
+const tableName = Resource.clientsTable.name;
+
+const create = async (
+  consumer: IConsumer_Botnorrea
+): Promise<IConsumer_Botnorrea> => {
+  await docClient.send(
+    new PutCommand({
+      TableName: tableName,
+      Item: consumer,
+    })
+  );
+  return consumer;
+};
+
+const getById = async (id: string): Promise<IConsumer_Botnorrea | null> => {
+  const result = await docClient.send(
+    new GetCommand({
+      TableName: tableName,
+      Key: { id },
+    })
+  );
+  return (result.Item as IConsumer_Botnorrea) || null;
+};
+
+const update = async (
+  id: string,
+  updates: Partial<Omit<IConsumer_Botnorrea, "id">>
+): Promise<IConsumer_Botnorrea | null> => {
+  const updateExpression: string[] = [];
+  const expressionAttributeNames: Record<string, string> = {};
+  const expressionAttributeValues: Record<string, any> = {};
+
+  Object.keys(updates).forEach((key, index) => {
+    const attrName = `#attr${index}`;
+    const attrValue = `:val${index}`;
+    updateExpression.push(`${attrName} = ${attrValue}`);
+    expressionAttributeNames[attrName] = key;
+    expressionAttributeValues[attrValue] = updates[key as keyof typeof updates];
+  });
+
+  if (updateExpression.length === 0) {
+    return getById(id);
   }
 
-  async create(consumer: IConsumer_Botnorrea): Promise<IConsumer_Botnorrea> {
-    return this.storageService.create(consumer, this.tableName);
-  }
+  const result = await docClient.send(
+    new UpdateCommand({
+      TableName: tableName,
+      Key: { id },
+      UpdateExpression: `SET ${updateExpression.join(", ")}`,
+      ExpressionAttributeNames: expressionAttributeNames,
+      ExpressionAttributeValues: expressionAttributeValues,
+      ReturnValues: "ALL_NEW",
+    })
+  );
 
-  async getById(id: string): Promise<IConsumer_Botnorrea | null> {
-    return this.storageService.getById<IConsumer_Botnorrea>(id, this.tableName);
-  }
+  return (result.Attributes as IConsumer_Botnorrea) || null;
+};
 
-  async update(
-    id: string,
-    updates: Partial<Omit<IConsumer_Botnorrea, "id">>
-  ): Promise<IConsumer_Botnorrea | null> {
-    return this.storageService.update<IConsumer_Botnorrea>(
-      id,
-      updates,
-      this.tableName
-    );
-  }
+const deleteById = async (id: string): Promise<boolean> => {
+  await docClient.send(
+    new DeleteCommand({
+      TableName: tableName,
+      Key: { id },
+    })
+  );
+  return true;
+};
 
-  async deleteById(id: string): Promise<boolean> {
-    return this.storageService.deleteById(id, this.tableName);
-  }
+const getAll = async (): Promise<IConsumer_Botnorrea[]> => {
+  const result = await docClient.send(
+    new ScanCommand({
+      TableName: tableName,
+    })
+  );
+  return (result.Items as IConsumer_Botnorrea[]) || [];
+};
 
-  async getAll(): Promise<IConsumer_Botnorrea[]> {
-    return this.storageService.getAll<IConsumer_Botnorrea>(this.tableName);
-  }
-}
-
-export const ConsumerService = new ConsumerServiceClass(
-  DynamoService,
-  Resource.clientsTable?.name
-);
-
-export { ConsumerServiceClass };
+export const ConsumerService: IConsumerService = {
+  getById,
+  create,
+  update,
+  deleteById,
+  getAll,
+};

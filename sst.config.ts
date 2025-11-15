@@ -32,6 +32,38 @@ export default $config({
       },
     });
 
+    const eventsTable = new sst.aws.Dynamo("eventsTable", {
+      fields: {
+        id: "string",
+        service: "string",
+        eventId: "string",
+        from: "string",
+        date: "number",
+        text: "string",
+      },
+      primaryIndex: {
+        hashKey: "id",
+      },
+      globalIndexes: {
+
+        serviceIndex: {
+          hashKey: "service",
+        },
+        serviceEventIdIndex: {
+          hashKey: "service",
+          sortKey: "eventId",
+        },
+        serviceFromIndex: {
+          hashKey: "service",
+          sortKey: "from",
+        },
+        serviceDateIndex: {
+          hashKey: "service",
+          sortKey: "date",
+        },
+      },
+    });
+
     const queue = new sst.aws.Queue("webhookQueue", {
       visibilityTimeout: "30 seconds",
     });
@@ -39,12 +71,13 @@ export default $config({
     new sst.aws.Function("api", {
       url: true,
       handler: "src/index.handler",
-      link: [clientsTable, queue],
+      link: [clientsTable, eventsTable, queue],
       environment,
     });
 
     return {
       clientsTableName: clientsTable.name,
+      eventsTableName: eventsTable.name,
       queueUrl: queue.url,
       queueArn: queue.arn,
     };
