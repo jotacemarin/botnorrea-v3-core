@@ -8,6 +8,7 @@ export enum ChatType_Telegram {
 
 export enum EntityType_Telegram {
   BOT_COMMAND = "bot_command",
+  MENTION = "mention",
 }
 
 export enum FormattingOptions_Telegram {

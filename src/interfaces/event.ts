@@ -5,16 +5,12 @@ export interface IEvent_Botnorrea {
   from: string;
   date: number;
   text: string;
+  [key: string]: unknown;
 }
 
 export interface IEventService {
   getById(id: string): Promise<IEvent_Botnorrea | null>;
   create(event: IEvent_Botnorrea): Promise<IEvent_Botnorrea>;
-  update(
-    id: string,
-    updates: Partial<Omit<IEvent_Botnorrea, "id">>
-  ): Promise<IEvent_Botnorrea | null>;
-  deleteById(id: string): Promise<boolean>;
   getAll(): Promise<IEvent_Botnorrea[]>;
   queryByService(service: string): Promise<IEvent_Botnorrea[]>;
   queryByServiceAndEventId(

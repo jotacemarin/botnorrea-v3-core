@@ -14,6 +14,14 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "eventsTable": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "usersTable": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "webhookQueue": {
       "type": "sst.aws.Queue"
       "url": string

@@ -39,28 +39,35 @@ export default $config({
         eventId: "string",
         from: "string",
         date: "number",
-        text: "string",
       },
       primaryIndex: {
         hashKey: "id",
       },
       globalIndexes: {
-
         serviceIndex: {
           hashKey: "service",
         },
         serviceEventIdIndex: {
           hashKey: "service",
-          sortKey: "eventId",
+          rangeKey: "eventId",
         },
         serviceFromIndex: {
           hashKey: "service",
-          sortKey: "from",
+          rangeKey: "from",
         },
         serviceDateIndex: {
           hashKey: "service",
-          sortKey: "date",
+          rangeKey: "date",
         },
+      },
+    });
+
+    const usersTable = new sst.aws.Dynamo("usersTable", {
+      fields: {
+        id: "string",
+      },
+      primaryIndex: {
+        hashKey: "id",
       },
     });
 
@@ -71,13 +78,14 @@ export default $config({
     new sst.aws.Function("api", {
       url: true,
       handler: "src/index.handler",
-      link: [clientsTable, eventsTable, queue],
+      link: [clientsTable, eventsTable, usersTable, queue],
       environment,
     });
 
     return {
       clientsTableName: clientsTable.name,
       eventsTableName: eventsTable.name,
+      usersTableName: usersTable.name,
       queueUrl: queue.url,
       queueArn: queue.arn,
     };
