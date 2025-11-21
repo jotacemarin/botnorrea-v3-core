@@ -1,7 +1,7 @@
 import {
   EntityType_Telegram,
   Update_Telegram,
-} from "../../../interfaces/telegram";
+} from "../../../interfaces";
 
 const BOT_USERNAME = process.env.BOT_USERNAME ?? "";
 

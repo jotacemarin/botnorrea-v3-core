@@ -3,27 +3,40 @@ import {
   DynamoDBDocumentClient,
   GetCommand,
   PutCommand,
-  UpdateCommand,
-  DeleteCommand,
   ScanCommand,
   QueryCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { Resource } from "sst";
-import { IEvent_Botnorrea, IEventService } from "../../interfaces/event";
+import { IEvent_Botnorrea, IEventService } from "../../interfaces";
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
 
 const tableName = Resource.eventsTable.name;
 
+const SECONDS_PER_MINUTE = 60;
+const MINUTES_PER_HOUR = 60;
+const HOURS_PER_DAY = 24;
+const TTL_DAYS = 30;
+const MILLISECONDS_TO_SECONDS = 1000;
+
+const SECONDS_PER_DAY = HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE;
+
 const create = async (event: IEvent_Botnorrea): Promise<IEvent_Botnorrea> => {
+  const currentTimestampSeconds = Math.floor(
+    Date.now() / MILLISECONDS_TO_SECONDS
+  );
+  const ttlSeconds = TTL_DAYS * SECONDS_PER_DAY;
+  const ttl = currentTimestampSeconds + ttlSeconds;
+  const eventWithTtl = { ...event, ttl };
+
   await docClient.send(
     new PutCommand({
       TableName: tableName,
-      Item: event,
+      Item: eventWithTtl,
     })
   );
-  return event;
+  return eventWithTtl;
 };
 
 const getById = async (id: string): Promise<IEvent_Botnorrea | null> => {
@@ -57,6 +70,7 @@ const queryByService = async (service: string): Promise<IEvent_Botnorrea[]> => {
       ExpressionAttributeValues: {
         ":service": service,
       },
+      ScanIndexForward: false,
     })
   );
   return (result.Items as IEvent_Botnorrea[]) || [];
@@ -123,6 +137,7 @@ const queryByServiceAndDate = async (
         ":service": service,
         ":date": date,
       },
+      ScanIndexForward: false,
     })
   );
   return (result.Items as IEvent_Botnorrea[]) || [];

@@ -1,6 +1,7 @@
 import { Context } from "hono";
 import { status } from "http-status";
 import { telegramCoreCommands } from "./telegram-core-commands";
+import { telegramCoreMention } from "./telegram-core-mention";
 import { telegramSaveEvent } from "./telegram-save-event";
 import { telegramSaveUser } from "./telegram-save-user";
 
@@ -9,6 +10,7 @@ export const telegramWebhook = async (c: Context) => {
 
   await Promise.allSettled([
     telegramCoreCommands(body),
+    telegramCoreMention(body),
     telegramSaveEvent(body),
     telegramSaveUser(body),
   ]);

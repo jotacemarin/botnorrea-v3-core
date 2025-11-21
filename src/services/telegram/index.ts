@@ -1,11 +1,11 @@
-import axios, { AxiosResponse, AxiosInstance } from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   Entity_Telegram,
   User_Telegram,
   FormattingOptions_Telegram,
   Message_Telegram,
-} from "../../interfaces/telegram";
-import { ITelegramService } from "../../interfaces/telegram";
+  ITelegramService,
+} from "../../interfaces";
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN ?? "";
 
@@ -155,6 +155,25 @@ const getChatMember = (
   });
 };
 
+const getMe = (): Promise<
+  AxiosResponse<{
+    ok: boolean;
+    result: {
+      id: number;
+      is_bot: boolean;
+      first_name: string;
+      username: string;
+      can_join_groups: boolean;
+      can_read_all_group_messages: boolean;
+      supports_inline_queries: boolean;
+      can_connect_to_business: boolean;
+      has_main_web_app: boolean;
+    };
+  }>
+> => {
+  return instance.get("/getMe");
+};
+
 const editMessageReplyMarkup = (params: {
   chat_id: number | string;
   message_id: number | string;
@@ -216,6 +235,7 @@ export const TelegramService: ITelegramService = {
   sendVideo,
   getChat,
   getChatMember,
+  getMe,
   editMessageReplyMarkup,
   restrictChatMember,
   deleteMessage,

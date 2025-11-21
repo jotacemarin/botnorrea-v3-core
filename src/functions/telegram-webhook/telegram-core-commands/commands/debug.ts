@@ -1,7 +1,7 @@
 import {
   FormattingOptions_Telegram,
   Update_Telegram,
-} from "../../../../interfaces/telegram";
+} from "../../../../interfaces";
 import { TelegramService } from "../../../../services";
 
 const getMessageToDebug = (body: Update_Telegram): string => {

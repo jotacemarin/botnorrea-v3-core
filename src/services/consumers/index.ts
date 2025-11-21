@@ -11,7 +11,7 @@ import { Resource } from "sst";
 import {
   IConsumer_Botnorrea,
   IConsumerService,
-} from "../../interfaces/consumer";
+} from "../../interfaces";
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);

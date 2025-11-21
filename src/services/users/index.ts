@@ -8,7 +8,7 @@ import {
   ScanCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { Resource } from "sst";
-import { IUser_Botnorrea, IUserService } from "../../interfaces/user";
+import { IUser_Botnorrea, IUserService } from "../../interfaces";
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);

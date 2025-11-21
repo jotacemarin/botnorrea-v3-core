@@ -21,6 +21,9 @@ export default $config({
       TELEGRAM_BOT_TOKEN: config.environment.TELEGRAM_BOT_TOKEN,
       TELEGRAM_WEBHOOK_SECRET: config.environment.TELEGRAM_WEBHOOK_SECRET,
       BOT_USERNAME: config.environment.BOT_USERNAME,
+      OLLAMA_BASE_URL:
+        config.environment.OLLAMA_BASE_URL || "http://localhost:11434",
+      OLLAMA_MODEL: config.environment.OLLAMA_MODEL || "gemma3",
     };
 
     const clientsTable = new sst.aws.Dynamo("clientsTable", {
@@ -46,6 +49,7 @@ export default $config({
       globalIndexes: {
         serviceIndex: {
           hashKey: "service",
+          rangeKey: "date",
         },
         serviceEventIdIndex: {
           hashKey: "service",
@@ -60,6 +64,7 @@ export default $config({
           rangeKey: "date",
         },
       },
+      ttl: "ttl",
     });
 
     const usersTable = new sst.aws.Dynamo("usersTable", {
@@ -72,7 +77,8 @@ export default $config({
     });
 
     const queue = new sst.aws.Queue("webhookQueue", {
-      visibilityTimeout: "30 seconds",
+      visibilityTimeout: "10 seconds",
+      delay: "2 seconds",
     });
 
     new sst.aws.Function("api", {

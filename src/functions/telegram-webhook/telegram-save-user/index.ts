@@ -1,6 +1,5 @@
-import { Update_Telegram } from "../../../interfaces";
-import { IUser_Botnorrea } from "../../../interfaces/user";
-import { UserService } from "../../../services/users";
+import { Update_Telegram, IUser_Botnorrea } from "../../../interfaces";
+import { UserService } from "../../../services";
 
 export const telegramSaveUser = async (body: Update_Telegram) => {
   if (!body || !body.message) {

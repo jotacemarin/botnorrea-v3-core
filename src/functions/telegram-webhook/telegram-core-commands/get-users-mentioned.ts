@@ -2,10 +2,9 @@ import {
   EntityType_Telegram,
   Update_Telegram,
   User_Telegram,
+  IUser_Botnorrea,
 } from "../../../interfaces";
-import { IUser_Botnorrea } from "../../../interfaces/user";
-import { TelegramService } from "../../../services";
-import { UserService } from "../../../services/users";
+import { TelegramService, UserService } from "../../../services";
 
 const BOT_USERNAME = process.env.BOT_USERNAME ?? "";
 

@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { ConsumerService } from "../../services/consumers";
+import { ConsumerService } from "../../services";
 
 export const verifyConsumer = async (
   username: string,
