@@ -22,7 +22,10 @@ export const debug = async (body: Update_Telegram) => {
 
   await TelegramService.sendMessage({
     chat_id: body.message.chat.id,
-    reply_to_message_id: body.message.message_id,
+    reply_parameters: {
+      message_id: body.message.message_id,
+      chat_id: body.message.chat.id,
+    },
     parse_mode: FormattingOptions_Telegram.HTML,
     text: `<code>${messageToDebug}</code>`,
   });

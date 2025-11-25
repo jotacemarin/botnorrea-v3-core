@@ -58,31 +58,60 @@ const sendMessage = (params: {
   message_thread_id?: number;
   parse_mode?: FormattingOptions_Telegram;
   entities?: Array<Entity_Telegram>;
+  disable_notification?: boolean;
   protect_content?: boolean;
-  reply_to_message_id?: number;
+  reply_parameters?: {
+    message_id: number;
+    chat_id?: number | string;
+  };
   reply_markup?: {
     inline_keyboard: Array<any>;
   };
-  has_spoiler?: boolean;
 }): Promise<AxiosResponse<SendMessageResponse_Telegram>> => {
   return instance.post("/sendMessage", params);
 };
 
-const editMessage = (params: {
+const editMessageText = (params: {
   chat_id: number | string;
   message_id: number | string;
   text: string;
-  message_thread_id?: number;
   parse_mode?: FormattingOptions_Telegram;
   entities?: Array<Entity_Telegram>;
-  protect_content?: boolean;
-  reply_to_message_id?: number;
   reply_markup?: {
     inline_keyboard: Array<any>;
   };
-  has_spoiler?: boolean;
 }): Promise<AxiosResponse<SendMessageResponse_Telegram>> => {
   return instance.post("/editMessageText", params);
+};
+
+const editMessageCaption = (params: {
+  chat_id: number | string;
+  message_id: number | string;
+  caption?: string;
+  parse_mode?: FormattingOptions_Telegram;
+  caption_entities?: Array<Entity_Telegram>;
+  show_caption_above_media?: boolean;
+  reply_markup?: {
+    inline_keyboard: Array<any>;
+  };
+}): Promise<AxiosResponse<SendMessageResponse_Telegram>> => {
+  return instance.post("/editMessageCaption", params);
+};
+
+const editMessageMedia = (params: {
+  chat_id: number | string;
+  message_id: number | string;
+  media: {
+    type: string;
+    media: string;
+    caption?: string;
+    parse_mode?: FormattingOptions_Telegram;
+    caption_entities?: Array<Entity_Telegram>;
+    show_caption_above_media?: boolean;
+    has_spoiler?: boolean;
+  };
+}) => {
+  return instance.post("/editMessageMedia", params);
 };
 
 const sendPhoto = (params: {
@@ -91,13 +120,17 @@ const sendPhoto = (params: {
   caption?: string;
   parse_mode?: FormattingOptions_Telegram;
   caption_entities?: Array<Entity_Telegram>;
-  reply_to_message_id?: number;
-  allow_sending_without_reply?: boolean;
+  show_caption_above_media?: boolean;
+  has_spoiler?: boolean;
+  disable_notification?: boolean;
   protect_content?: boolean;
+  reply_parameters?: {
+    message_id: number;
+    chat_id?: number | string;
+  };
   reply_markup?: {
     inline_keyboard: Array<any>;
   };
-  has_spoiler?: boolean;
 }): Promise<AxiosResponse<SendMessageResponse_Telegram>> => {
   return instance.post("/sendPhoto", params);
 };
@@ -117,6 +150,26 @@ const sendVideo = (params: {
   has_spoiler?: boolean;
 }): Promise<AxiosResponse<SendMessageResponse_Telegram>> => {
   return instance.post("/sendVideo", params);
+};
+
+const sendAudio = (params: {
+  chat_id: number | string;
+  audio: string;
+  caption?: string;
+  parse_mode?: FormattingOptions_Telegram;
+  caption_entities?: Array<Entity_Telegram>;
+  duration?: number;
+  performer?: string;
+  title?: string;
+  thumbnail?: string;
+  disable_notification?: boolean;
+  protect_content?: boolean;
+  reply_parameters?: {
+    message_id: number;
+    chat_id?: number | string;
+  };
+}): Promise<AxiosResponse<SendMessageResponse_Telegram>> => {
+  return instance.post("/sendAudio", params);
 };
 
 const getChat = (
@@ -230,9 +283,12 @@ export const TelegramService: ITelegramService = {
   setWebhook,
   getWebhookInfo,
   sendMessage,
-  editMessage,
+  editMessageText,
+  editMessageCaption,
+  editMessageMedia,
   sendPhoto,
   sendVideo,
+  sendAudio,
   getChat,
   getChatMember,
   getMe,
