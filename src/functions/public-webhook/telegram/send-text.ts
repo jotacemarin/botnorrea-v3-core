@@ -29,12 +29,12 @@ export const sendText = async (
 
     return {
       code: status.OK,
-      result: { message: "Photo sent successfully" },
+      result: { message: "Text sent successfully" },
     };
   } catch (error) {
     return {
       code: status.INTERNAL_SERVER_ERROR,
-      result: { error: "Failed to send photo" },
+      result: { error: "Failed to send text" },
     };
   }
 };

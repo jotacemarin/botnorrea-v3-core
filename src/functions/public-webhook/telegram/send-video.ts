@@ -39,12 +39,12 @@ export const sendVideo = async (
 
     return {
       code: status.OK,
-      result: { message: "Photo sent successfully" },
+      result: { message: "Video sent successfully" },
     };
   } catch (error) {
     return {
       code: status.INTERNAL_SERVER_ERROR,
-      result: { error: "Failed to send photo" },
+      result: { error: "Failed to send video" },
     };
   }
 };
