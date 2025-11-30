@@ -50,7 +50,7 @@ const getTextCommandKey = (
   return key?.trim();
 };
 
-export const getCommand = (body: Update_Telegram): null | string => {
+export const getCommandKey = (body: Update_Telegram): null | string => {
   const hasTextCommand = checkIfHasTextCommand(body);
   if (!hasTextCommand) {
     return null;

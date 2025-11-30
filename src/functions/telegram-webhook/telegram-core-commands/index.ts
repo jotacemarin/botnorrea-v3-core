@@ -1,15 +1,8 @@
 import { Update_Telegram } from "../../../interfaces";
-import { COMMANDS } from "./commands";
-import { getCommand } from "./get-command";
+import { handler } from "./commands";
 
 export const telegramCoreCommands = async (body: Update_Telegram) => {
   if (!body || !body.message) {
-    return;
-  }
-
-  const command = getCommand(body);
-  const handler = COMMANDS[command as keyof typeof COMMANDS];
-  if (!handler) {
     return;
   }
 

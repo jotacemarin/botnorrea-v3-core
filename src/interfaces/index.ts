@@ -1,3 +1,4 @@
+export * from "./command";
 export * from "./consumer";
 export * from "./event";
 export * from "./telegram";

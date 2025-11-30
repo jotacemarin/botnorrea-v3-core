@@ -14,6 +14,10 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "commandsTable": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "eventsTable": {
       "name": string
       "type": "sst.aws.Dynamo"

@@ -76,6 +76,21 @@ export default $config({
       },
     });
 
+    const commandsTable = new sst.aws.Dynamo("commandsTable", {
+      fields: {
+        key: "string",
+        creator: "string",
+      },
+      primaryIndex: {
+        hashKey: "key",
+      },
+      globalIndexes: {
+        creatorIndex: {
+          hashKey: "creator",
+        },
+      },
+    });
+
     const queue = new sst.aws.Queue("webhookQueue", {
       visibilityTimeout: "10 seconds",
       delay: "2 seconds",
@@ -84,7 +99,7 @@ export default $config({
     new sst.aws.Function("api", {
       url: true,
       handler: "src/index.handler",
-      link: [clientsTable, eventsTable, usersTable, queue],
+      link: [clientsTable, eventsTable, usersTable, commandsTable, queue],
       environment,
     });
 
@@ -92,6 +107,7 @@ export default $config({
       clientsTableName: clientsTable.name,
       eventsTableName: eventsTable.name,
       usersTableName: usersTable.name,
+      commandsTableName: commandsTable.name,
       queueUrl: queue.url,
       queueArn: queue.arn,
     };
